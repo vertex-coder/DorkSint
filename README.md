@@ -8,6 +8,9 @@ _OSINT tool for Dorks search - Yandex, Google, Bing, DuckDuckGo_
 - `git clone https://github.com/vertex-coder/DorkSint.git`
 
 
+- `cd DorkSint`
+
+
 - `pip install setup.py`
 
 
