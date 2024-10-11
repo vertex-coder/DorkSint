@@ -1,4 +1,4 @@
-# `🔻**To install**:
+# 🔻**To install**:
 
 - `git clone https://github.com/vertex-coder/DorkSint.git`
 
