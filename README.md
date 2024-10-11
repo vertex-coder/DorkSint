@@ -11,7 +11,7 @@ _OSINT tool for Dorks search - Yandex, Google, Bing, DuckDuckGo_
 - `cd DorkSint`
 
 
-- `pip install setup.py`
+- `pip install .`
 
 
 # 🔍 **Usage**:
