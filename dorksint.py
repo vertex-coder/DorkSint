@@ -131,6 +131,7 @@ def main():
     args = parser.parse_args()
 
     query = ' '.join(args.query)
+    query = f'"{query}"'
 
     if args.filetypes:
         file_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'sql', 'db', 'csv']
