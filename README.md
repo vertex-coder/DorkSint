@@ -1,8 +1,8 @@
 🔻*To install*:
 
-git clone https://github.com/vertex-coder/DorkSint.git
+`git clone https://github.com/vertex-coder/DorkSint.git`
 
-pip install .
+`pip install .`
 
 🔍 *Usage*:
 `dorksint {ur dork}`
