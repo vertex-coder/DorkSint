@@ -61,7 +61,7 @@ def searchGoogle(query):
         for item in soup.find_all('div', class_='g'):
             title = item.find('h3').text if item.find('h3') else "No title"
             link = item.find('a')['href'] if item.find('a') else "No link"
-            summary = item.find('span', {'class': 'aCOpRe'}).text if item.find('span', {'class': 'aCOpRe'}) else "No summary"
+            
             results.append((title, link, summary))
 
         return results
@@ -125,7 +125,7 @@ def search_dork_all_engines(dork):
 
             for title, link, summary in results:
                 print(f"{colored('[+]', 'green')} {colored('Title: ' + title)}")
-                print(colored(f"{colored('[+]', 'green')} {colored('Site: ' + link)}"), '\n')
+                print(colored(f"{colored('[+]', 'green')} {colored('Site: ' + link)}"))
 
         else:
             print(colored(f'[!] {engine}: Not found.\n', 'red'))
