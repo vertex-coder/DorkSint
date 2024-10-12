@@ -22,7 +22,10 @@ _OSINT tool for Dorks search - Yandex, Google, Bing, DuckDuckGo_
 - Search with PDF, WORD, EXCEL, DB files `dorksint -f {ur dork}`
 
 # ⬇️ Demo
-![image](https://github.com/user-attachments/assets/20d1f59a-5345-49dd-920f-0db5101c975d)
+
+
+- ![image](https://github.com/user-attachments/assets/c3cb9f37-57ab-4255-881c-a70467b0ccaa)
+
 
 
 # Enjoy!
