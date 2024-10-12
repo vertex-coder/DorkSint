@@ -89,8 +89,6 @@ def search_dork_all_engines(dork):
             for title, link in results:
                 print(f"{colored('[+]', 'green')} {colored('Title: ' + title)}")
                 print(f"{colored('[+]', 'green')} {colored('Site: ' + link)}\n")
-
-
         else:
             print(colored(f'\n[!] {engine}: No results found.\n', 'red'))
 
@@ -109,10 +107,10 @@ def main():
   |    | |    | |   ' |-<        |  | |    |  |   
   /---/   `._.' /     /  \_ \___.'  / /    |  \__/
 """)
-        print(f'{colored('[!]', 'red')} Invalid usage.\n')
-        print(f'{colored('[+]', 'green')} Usage:\n')
-        print(f"{colored('[+]', 'green')}"+" Default search: dorksint [your dork]")
-        print(f"{colored('[+]', 'green')}"+" Search with PDF, WORD, EXCEL, DB files: dorksint -f [your dork]\n")
+        print(f"{colored('[!]', 'red')} Invalid usage.\n")
+        print(f"{colored('[+]', 'green')} Usage:\n")
+        print(f"{colored('[+]', 'green')} Default search: dorksint [your dork]")
+        print(f"{colored('[+]', 'green')} Search with PDF, WORD, EXCEL, DB files: dorksint -f [your dork]\n")
         return  
 
     query = ' '.join(args.query)
@@ -129,7 +127,6 @@ def main():
         print(colored('[v] GitHub - https://github.com/vertex-coder/DorkSint\n', 'magenta', attrs=['bold']))
         print(colored(f"[*] Searching with dork: {query}\n", 'light_magenta', attrs=['bold']))
         search_dork_all_engines(query)
-
 
 if __name__ == "__main__":
     main()
