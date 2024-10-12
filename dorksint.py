@@ -85,12 +85,12 @@ def search_dork_all_engines(dork):
 
     for engine, results in search_engines.items():
         if results:
-            print(colored(f"[+] {engine}:\n", 'cyan', attrs=['bold']))
+            print(colored(f"\n[+] {engine}:\n", 'cyan', attrs=['bold']))
             for title, link in results:
                 print(f"{colored('[+]', 'green')} {colored('Title: ' + title)}")
                 print(f"{colored('[+]', 'green')} {colored('Site: ' + link + '\n')}")
         else:
-            print(colored(f'[!] {engine}: No results found.\n', 'red'))
+            print(colored(f'\n[!] {engine}: No results found.\n', 'red'))
 
 def main():
     parser = argparse.ArgumentParser(description="DorkSint - OSINT Tool", usage="dorksint [-f] {your dork}")
