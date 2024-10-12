@@ -88,7 +88,8 @@ def search_dork_all_engines(dork):
             print(colored(f"\n[+] {engine}:\n", 'cyan', attrs=['bold']))
             for title, link in results:
                 print(f"{colored('[+]', 'green')} {colored('Title: ' + title)}")
-                print(f"{colored('[+]', 'green')} {colored('Site: ' + link + '\n')}")
+                print(f"{colored('[+]', 'green')} {colored('Site: ' + link)}\n")
+
 
         else:
             print(colored(f'\n[!] {engine}: No results found.\n', 'red'))
