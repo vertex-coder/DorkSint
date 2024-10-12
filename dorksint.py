@@ -12,15 +12,15 @@ import requests
 from bs4 import BeautifulSoup
 from termcolor import colored
 
-
-headers = {
+# Global User-Agent header to mimic a browser request
+HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36"
 }
 
-
-def getPageTitle(url):
+def get_page_title(url):
+    """Fetch the title of a webpage."""
     try:
-        response = requests.get(url, timeout=5)
+        response = requests.get(url, headers=HEADERS, timeout=5)
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
             return soup.title.string if soup.title else "Title not found"
@@ -29,106 +29,68 @@ def getPageTitle(url):
     except Exception as e:
         return f"Error: {str(e)}"
 
-
-def searchBing(query):
-
-    search_url = f"https://www.bing.com/search?q={query}"
-    
+def search_engine(query, search_url, result_selector, title_selector, link_selector):
+    """Generic search function for different search engines."""
     try:
-        response = requests.get(search_url, headers=headers)
+        response = requests.get(search_url.format(query=query), headers=HEADERS)
         soup = BeautifulSoup(response.text, 'html.parser')
 
         results = []
-        for item in soup.find_all('li', {'class': 'b_algo'}):
-            title = item.find('h2').text if item.find('h2') else "No title"
-            link = item.find('a')['href'] if item.find('a') else "No link"
+        for item in soup.select(result_selector):
+            title = item.select_one(title_selector).text if item.select_one(title_selector) else "No title"
+            link = item.select_one(link_selector)['href'] if item.select_one(link_selector) else "No link"
             results.append((title, link))
 
         return results
     except Exception as e:
-        print(f"{colored('[!]', 'red')} Error during Bing search: {str(e)}.")
+        print(f"{colored('[!]', 'red')} Error during search: {str(e)}.")
         return []
 
-def searchGoogle(query):
+def search_bing(query):
+    return search_engine(query, 
+                         "https://www.bing.com/search?q={query}", 
+                         'li.b_algo', 
+                         'h2', 
+                         'a')
 
-    search_url = f"https://www.google.com/search?q={query}"
-    
-    try:
-        response = requests.get(search_url, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
+def search_google(query):
+    return search_engine(query, 
+                         "https://www.google.com/search?q={query}", 
+                         'div.g', 
+                         'h3', 
+                         'a')
 
-        results = []
-        for item in soup.find_all('div', class_='g'):
-            title = item.find('h3').text if item.find('h3') else "No title"
-            link = item.find('a')['href'] if item.find('a') else "No link"
-            
-            results.append((title, link, summary))
+def search_yandex(query):
+    return search_engine(query, 
+                         "https://yandex.com/search/?text={query}", 
+                         'li.serp-item', 
+                         'h2', 
+                         'a')
 
-        return results
-    except Exception as e:
-        print(f"{colored('[!]', 'red')} Error during Google search: {str(e)}.")
-        return []
-
-def searchYandex(query):
-
-    search_url = f"https://yandex.com/search/?text={query}"
-    
-    try:
-        response = requests.get(search_url, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
-
-        results = []
-        for item in soup.find_all('li', {'class': 'serp-item'}):
-            title = item.find('h2').text if item.find('h2') else "No title"
-            link = item.find('a')['href'] if item.find('a') else "No link"
-            summary = item.find('div', {'class': 'text-container'}).text if item.find('div', {'class': 'text-container'}) else "No summary"
-            results.append((title, link, summary))
-
-        return results
-    except Exception as e:
-        print(f"{colored('[!]', 'red')} Error during Yandex search: {str(e)}")
-        return []
-
-def searchDuckDuckGo(query):
-
-    search_url = f"https://duckduckgo.com/html/?q={query}"
-    
-    try:
-        response = requests.get(search_url, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
-
-        results = []
-        for item in soup.find_all('div', {'class': 'result__body'}):
-            title = item.find('a', {'class': 'result__a'}).text if item.find('a', {'class': 'result__a'}) else "No title"
-            link = item.find('a')['href'] if item.find('a') else "No link"
-            summary = item.find('a', {'class': 'result__snippet'}).text if item.find('a', {'class': 'result__snippet'}) else "No summary"
-            results.append((title, link, summary))
-
-        return results
-    except Exception as e:
-        print(f"{colored('[!]', 'red')} Error during DuckDuckGo search: {str(e)}.")
-        return []
-
-
+def search_duckduckgo(query):
+    return search_engine(query, 
+                         "https://duckduckgo.com/html/?q={query}", 
+                         'div.result__body', 
+                         'a.result__a', 
+                         'a')
 
 def search_dork_all_engines(dork):
+    """Search for a dork across multiple search engines."""
     search_engines = {
-        'Yandex': searchYandex(dork),
-        'Google': searchGoogle(dork),
-        'Bing': searchBing(dork),
-        'DuckDuckGo': searchDuckDuckGo(dork),
+        'Yandex': search_yandex(dork),
+        'Google': search_google(dork),
+        'Bing': search_bing(dork),
+        'DuckDuckGo': search_duckduckgo(dork),
     }
 
     for engine, results in search_engines.items():
         if results:
             print(colored(f"[+] {engine}:\n", 'cyan', attrs=['bold']))
-
-            for title, link, summary in results:
+            for title, link in results:
                 print(f"{colored('[+]', 'green')} {colored('Title: ' + title)}")
-                print(colored(f"{colored('[+]', 'green')} {colored('Site: ' + link)}"))
-
+                print(f"{colored('[+]', 'green')} {colored('Site: ' + link + '\n')}")
         else:
-            print(colored(f'[!] {engine}: Not found.\n', 'red'))
+            print(colored(f'[!] {engine}: No results found.\n', 'red'))
 
 def main():
     parser = argparse.ArgumentParser(description="DorkSint - OSINT Tool", usage="dorksint [-f] {your dork}")
@@ -137,8 +99,14 @@ def main():
 
     args = parser.parse_args()
 
-    
     if not args.query:
+        print(r"""
+  .___                \       _____           .   
+  /   `    __.  .___  |   ,  (      ` , __   _/_  
+  |    | .'   \ /   \ |  /    `--.  | |'  `.  |   
+  |    | |    | |   ' |-<        |  | |    |  |   
+  /---/   `._.' /     /  \_ \___.'  / /    |  \__/
+""")
         print(f'{colored('[!]', 'red')} Invalid usage.\n')
         print(f'{colored('[+]', 'green')} Usage:\n')
         print(f"{colored('[+]', 'green')}"+" Default search: dorksint [your dork]")
@@ -153,11 +121,11 @@ def main():
         file_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'sql', 'db', 'csv']
         file_type_dork = ' OR '.join([f'filetype:{ft}' for ft in file_types])
         specific_dork = f'{query} {file_type_dork}'
-        print(f"[*] Searching with dork: {specific_dork}")
+        print(colored(f"[*] Searching with dork: {specific_dork}\n", 'light_magenta', attrs=['bold']))
         search_dork_all_engines(specific_dork)
     else:
         print(colored('[v] GitHub - https://github.com/vertex-coder/DorkSint\n', 'magenta', attrs=['bold']))
-        print(f"[*] Searching with dork: {query}\n")
+        print(colored(f"[*] Searching with dork: {query}\n", 'light_magenta', attrs=['bold']))
         search_dork_all_engines(query)
 
 
