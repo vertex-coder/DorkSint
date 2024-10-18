@@ -1,10 +1,5 @@
 # DorkSint
 
-  .___                \       _____           .   
-  /   `    __.  .___  |   ,  (      ` , __   _/_  
-  |    | .'   \ /   \ |  /    `--.  | |'  `.  |   
-  |    | |    | |   ' |-<        |  | |    |  |   
-  /---/   `._.' /     /  \_ \___.'  / /    |  \__/
 
 _OSINT tool for Dorks search - Yandex, Google, Bing, DuckDuckGo_
 
