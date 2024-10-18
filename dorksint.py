@@ -2,6 +2,7 @@ import argparse
 import requests
 from bs4 import BeautifulSoup
 from termcolor import colored
+import time
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36"
@@ -33,24 +34,7 @@ SEARCH_ENGINES = {
         'title_selector': 'a.result__a',
         'link_selector': 'a',
     },
-    'Ask': {
-        'url': "https://www.ask.com/web?q={query}",
-        'result_selector': '.PartialSearchResults-item',
-        'title_selector': 'a.PartialSearchResults-item-title-link',
-        'link_selector': 'a.PartialSearchResults-item-title-link',
-    },
-    'Qwant': {
-        'url': "https://www.qwant.com/?q={query}&t=web",
-        'result_selector': 'div.result--web',
-        'title_selector': 'a.result--title',
-        'link_selector': 'a.result--title',
-    },
-    'Yahoo': {
-        'url': "https://search.yahoo.com/search?p={query}",
-        'result_selector': 'div.dd.algo',
-        'title_selector': 'h3.title',
-        'link_selector': 'a',
-    }
+
 }
 
 
@@ -67,20 +51,32 @@ def search_engine(query, search_url, result_selector, title_selector, link_selec
 
         return results
     except Exception as e:
-        print(f"{colored('!', 'red')} Error during search: {str(e)}.")
+        print(f"{colored('| !', 'red')} Error during search: {str(e)}.")
         return []
 
+
 def search_dork_all_engines(dork):
+    start_time = time.time()
+    total_results = 0
+
     for engine, details in SEARCH_ENGINES.items():
         results = search_engine(dork, details['url'], details['result_selector'], details['title_selector'], details['link_selector'])
 
         if results:
-            print(colored('#', 'magenta') + f" {engine}:\n\n")
+            print(colored('| #', 'green') + f" {engine}:\n")
             for title, link in results:
                 print(f"{colored('+', 'green')} {colored('Title: ' + title)}")
-                print(f"{colored('+', 'green')} {colored('Site: ' + link + '\n')}")
+                print(f"{colored('+', 'green')} {colored('Site: ' + link)}\n")
+            total_results += len(results)
         else:
-            print(colored('#', 'red') + f' {engine}: No results found...\n\n')
+            print(colored('| #', 'red') + f' {engine}: No results found...\n')
+
+    elapsed_time = time.time() - start_time
+    print('\n')
+    print(colored('| #', 'green') + f" Search completed with {colored(total_results, 'green')} results.")
+    print(colored('| #', 'green') + f" Search duration: {colored(str(f'{elapsed_time:.2f}') + ' s', 'green')}.")
+
+
 
 def main():
     parser = argparse.ArgumentParser(description="DorkSint - OSINT Tool", usage="dorksint [-f] {your dork}")
@@ -100,10 +96,10 @@ GitHub - https://github.com/vertex-coder/DorkSint
   |    | |    | |   ' |-<        |  | |    |  |   
   /---/   `._.' /     /  \_ \___.'  / /    |  \__/
 """)
-        print(colored('!', 'red') + ' Invalid usage!\n')
-        print(colored('#', 'green') + " Usage:\n")
-        print(colored('#', 'green') + " Default search: 'dorksint {your dork for search}'.")
-        print(colored('#', 'green') + " Search with PDF, WORD, EXCEL, DB files: 'dorksint -f {your dork for search}'.\n")
+        print(colored('| !', 'red') + ' Invalid usage!\n')
+        print(colored('| #', 'green') + " Usage:\n")
+        print(colored('| #', 'green') + " Default search: 'dorksint {your dork for search}'.")
+        print(colored('| #', 'green') + " Search with PDF, WORD, EXCEL, DB files: 'dorksint -f {your dork for search}'.\n")
         return  
 
     query = ' '.join(args.query)
@@ -125,7 +121,7 @@ GitHub - https://github.com/vertex-coder/DorkSint
         file_type_dork = ' OR '.join([f'filetype:{ft}' for ft in file_types])
 
         specific_dork = f'{query} {file_type_dork}'
-        print(colored('*', 'green') + f" Searching with dork: {query}...\n")
+        print(colored('| *', 'green') + f" Searching with dork: {query}...\n")
         search_dork_all_engines(specific_dork)
 
     else:
@@ -141,7 +137,7 @@ GitHub - https://github.com/vertex-coder/DorkSint
   /---/   `._.' /     /  \_ \___.'  / /    |  \__/
 """)
         
-        print(colored('*', 'green') + f" Searching with dork: {query}...\n")
+        print(colored('| *', 'green') + f" Searching with dork: {query}...\n")
         search_dork_all_engines(query)
 
 if __name__ == "__main__":
