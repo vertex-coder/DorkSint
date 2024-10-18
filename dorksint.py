@@ -85,7 +85,7 @@ def search_dork_all_engines(dork):
 def main():
     parser = argparse.ArgumentParser(description="DorkSint - OSINT Tool", usage="dorksint [-f] {your dork}")
     parser.add_argument("query", nargs='*', help="The search query (e.g., full name)")
-    parser.add_argument("-f",  action="store_true", help="Include file-specific dork search")
+    parser.add_argument("-f", "--filetypes", action="store_true", help="Include file-specific dork search")
 
     args = parser.parse_args()
 
