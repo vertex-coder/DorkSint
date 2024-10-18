@@ -1,7 +1,7 @@
 # DorkSint
 
 
-_OSINT tool for Dorks search - Yandex, Google, Bing, DuckDuckGo_
+_OSINT tool for Dorks search - Yandex, Google, Bing, DuckDuckGo and more..._
 
 
 # 🔻**To install**:
