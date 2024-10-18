@@ -80,7 +80,7 @@ def search_dork_all_engines(dork):
                 print(f"{colored('+', 'green')} {colored('Title: ' + title)}")
                 print(f"{colored('+', 'green')} {colored('Site: ' + link + '\n')}")
         else:
-            print(colored('#', 'red') + f' {engine}: No results found...\n')
+            print(colored('#', 'red') + f' {engine}: No results found...\n\n')
 
 def main():
     parser = argparse.ArgumentParser(description="DorkSint - OSINT Tool", usage="dorksint [-f] {your dork}")
